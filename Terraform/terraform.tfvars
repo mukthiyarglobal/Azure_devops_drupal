@@ -1,0 +1,6 @@
+resource_group_name  = "demomyrg"
+location             = "Central India"
+service_plan_name    = "mydemoazplan"
+docker_registry_name = "demoacrdrupal"
+web-app-name         = "demodrupal0011"
+websites_port        = "80"
