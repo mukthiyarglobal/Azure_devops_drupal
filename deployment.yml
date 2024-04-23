@@ -1,0 +1,89 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:latest
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "12345"
+            - name: MYSQL_DATABASE
+              value: "drupal"
+            - name: MYSQL_USER
+              value: "drupaluser"
+            - name: MYSQL_PASSWORD
+              value: "12345"
+            - name: MYSQL_HOST
+              value: "mysql-service"
+      imagePullSecrets:
+        - name: maykey
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  ports:
+    -
+      name: mysql
+      port: 3306
+      protocol: TCP
+  selector:
+    app: mysql
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drupal-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drupal
+  template:
+    metadata:
+      labels:
+        app: drupal
+    spec:
+      containers:
+        - name: drupal
+          image: drupalacr01.azurecr.io/drupal:{{DOCKER_TAG}}
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MYSQL_DATABASE
+              value: "drupal"
+            - name: MYSQL_USER
+              value: "drupaluser"
+            - name: MYSQL_PASSWORD
+              value: "12345"
+      imagePullSecrets:
+        - name: maykey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: drupal-service
+spec:
+  selector:
+    app: drupal
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
