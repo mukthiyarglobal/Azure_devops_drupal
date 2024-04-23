@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    stages {
+        stage ('checkout') {
+            steps {
+                git branch: 'main', credentialsId: 'Github_login', url: 'https://github.com/mukthiyarglobal/Azure_devops_drupal.git'
+            }
+        }
+        stage ('azure_login') {
+            steps {
+                withCredentials([azureServicePrincipal('azure_loginid')]) {
+                   // some block
+                }
+            }
+        }
+        stage ('terraform init') {
+            steps {
+                dir('Terraform') {
+                    sh 'terraform init'
+                }
+            }
+        }
+        stage ('terraform plan') {
+            steps {
+                dir('Terraform') {
+                    sh 'terraform plan -out=tfplan'
+                }
+            }
+        }
+        stage ('terraform action') {
+            steps {
+                dir('Terraform') {
+                     echo "Terraform action is --> ${action}"
+                     sh ('terraform ${action} --auto-approve')
+                }
+            }
+        }
+    }
+}
