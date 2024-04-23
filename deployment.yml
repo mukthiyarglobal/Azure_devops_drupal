@@ -30,7 +30,7 @@ spec:
             - name: MYSQL_HOST
               value: "mysql-service"
       imagePullSecrets:
-        - name: appkey
+        - name: testkey
 
 ---
 apiVersion: v1
@@ -73,7 +73,7 @@ spec:
             - name: MYSQL_PASSWORD
               value: "12345"
       imagePullSecrets:
-        - name: appkey
+        - name: testkey
 ---
 apiVersion: v1
 kind: Service
