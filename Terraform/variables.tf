@@ -6,19 +6,19 @@ variable "location" {
   type        = string
   description = "Resources location in Azure"
 }
-variable "service_plan_name" {
+variable "cluster_name" {
   type        = string
-  description = "service_plan name"
+  description = "AKS name in Azure"
 }
-variable "docker_registry_name" {
+variable "kubernetes_version" {
   type        = string
-  description = "acr_name"
+  description = "Kubernetes version"
 }
-variable "web-app-name" {
-  type        = string
-  description = "app-service name"
+variable "system_node_count" {
+  type        = number
+  description = "Number of AKS worker nodes"
 }
-variable "websites_port" {
+variable "acr_name" {
   type        = string
-  description = "port_number"
+  description = "ACR name"
 }
